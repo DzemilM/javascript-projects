@@ -1,0 +1,168 @@
+:root {
+  --clr-bg: #f4f5f7;
+  --clr-surface: #ffffff;
+  --clr-border: #1b1b1b;
+  --clr-text: #1b1b1b;
+  --clr-muted: #6b7280;
+  --clr-hover: #f0f1f3;
+  --clr-accent: #1b1b1b;
+
+  --radius: 10px;
+  --dropdown-width: 320px;
+}
+
+body {
+  display: grid;
+  place-items: start center;
+  padding: 4rem 1.25rem;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+}
+
+.page {
+  width: 100%;
+  max-width: var(--dropdown-width);
+}
+
+.page__title {
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* ---------- Dropdown root ---------- */
+
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+/* ---------- Trigger ---------- */
+
+.dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--clr-surface);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  font-size: 1.0625rem;
+  text-align: left;
+}
+
+.dropdown__trigger:focus-visible {
+  outline: 3px solid rgba(27, 27, 27, 0.25);
+  outline-offset: 2px;
+}
+
+.dropdown__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Placeholder styling: JS adds `is-placeholder` while nothing is selected. */
+.dropdown__label.is-placeholder {
+  color: var(--clr-muted);
+}
+
+/* Chevron drawn with a rotated border - points down, flips up when open. */
+.dropdown__chevron {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.dropdown.is-open .dropdown__chevron {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+/* ---------- List ---------- */
+
+.dropdown__list {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  overflow: hidden auto;
+  max-height: 16rem;
+  background: var(--clr-surface);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+
+  /* Hidden by default */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease, visibility 150ms;
+}
+
+.dropdown.is-open .dropdown__list {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ---------- Options ---------- */
+
+.dropdown__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.dropdown__option:last-child {
+  border-bottom: none;
+}
+
+.dropdown__option:hover,
+.dropdown__option.is-active {
+  background: var(--clr-hover);
+}
+
+/* Check mark - only visible on the selected option.
+   JS sets aria-selected="true" on it, CSS keys off that. */
+.dropdown__option::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--clr-accent);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 120ms ease, transform 120ms ease;
+
+  /* white check inside the dark circle */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size: 13px 13px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dropdown__option[aria-selected="true"]::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------- Output line (just for debugging your state) ---------- */
+
+.output {
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--clr-muted);
+}

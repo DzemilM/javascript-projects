@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Dropdown</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="page">
+    <h1 class="page__title">Custom Dropdown</h1>
+
+    <!--
+      The whole component lives inside .dropdown.
+      JS toggles the class `is-open` on this root element - CSS does the rest.
+      The <ul> is rendered by JS from the items in js/data.js, so it starts empty.
+    -->
+    <div class="dropdown" id="dropdown">
+      <button
+        type="button"
+        class="dropdown__trigger"
+        id="dropdownTrigger"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-controls="dropdownList"
+      >
+        <span class="dropdown__label" id="dropdownLabel">Select an Item</span>
+        <span class="dropdown__chevron" aria-hidden="true"></span>
+      </button>
+
+      <ul
+        class="dropdown__list"
+        id="dropdownList"
+        role="listbox"
+        tabindex="-1"
+        aria-labelledby="dropdownLabel"
+      >
+        <!-- <li class="dropdown__option" role="option" data-value="1">...</li> -->
+      </ul>
+    </div>
+
+    <p class="output">
+      Selected: <strong id="selectedOutput">none</strong>
+    </p>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
