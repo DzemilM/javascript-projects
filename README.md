@@ -6,9 +6,9 @@ browser and it runs.
 
 ## Projects
 
-| Project | What it is |
-| --- | --- |
-| [Custom Dropdown](./Custom%20Dropdown) | A dropdown menu with open, closed and selected states |
-| [Temperature Converter](./Temperature%20Converter) | Converts between temperature units |
+| Project | What it is | Project page |
+| --- | --- | --- |
+| [Custom Dropdown](./Custom%20Dropdown) | A dropdown menu with open, closed and selected states | - |
+| [Temperature Converter](./Temperature%20Converter) | Converts between Celsius, Fahrenheit and Kelvin | https://roadmap.sh/projects/temperature-converter |
 
 Each project has its own README with details.
