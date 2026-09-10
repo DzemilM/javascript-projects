@@ -8,17 +8,18 @@ const selectedOutput = document.getElementById("selectedOutput");
 // Keeps track of which item is currently chosen (null = nothing yet).
 let selectedValue = null;
 
-/*
-  Build the <li> options from the ITEMS array in data.js.
-  Each one needs:
-    class="dropdown__option"  role="option"  data-value="..."  and the label text.
-*/
+
 function buildOptions() {
-  // TODO:
-  //   1. loop over ITEMS
-  //   2. const li = document.createElement("li")
-  //   3. set li.className, li.dataset.value, li.textContent
-  //   4. list.appendChild(li)
+ 
+  for (const item of ITEMS) {
+  const li = document.createElement("li");   // make the element
+  li.className = "dropdown__option";          // CSS needs this
+  li.textContent = item.label;                 // the visible text
+  li.dataset.value=item.value;
+  list.appendChild(li);                       // put it on the page
+}
+
+  
 }
 
 // Show the list.
