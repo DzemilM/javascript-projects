@@ -24,19 +24,23 @@ function buildOptions() {
 
 // Show the list.
 function openDropdown() {
-  // TODO:
-  //   dropdown.classList.add("is-open")
-  //   trigger.setAttribute("aria-expanded", "true")
+  dropdown.classList.add("is-open");
+  trigger.setAttribute("aria-expanded", "true");
 }
 
 // Hide the list.
 function closeDropdown() {
-  // TODO: the opposite of openDropdown()
+  dropdown.classList.remove("is-open");
+  trigger.setAttribute("aria-expanded", "false");
 }
 
 // Open if closed, close if open.
 function toggleDropdown() {
-  // TODO: check dropdown.classList.contains("is-open") and branch
+  if(dropdown.classList.contains("is-open")){
+    closeDropdown()
+  } else {
+    openDropdown()
+  }
 }
 
 /*
@@ -44,27 +48,32 @@ function toggleDropdown() {
   `option` is the <li> element that was clicked.
 */
 function selectOption(option) {
-  // TODO:
-  //   - selectedValue = option.dataset.value
-  //   - put the option's text into label.textContent
-  //   - label.classList.remove("is-placeholder")  (grey placeholder styling)
-  //   - clear aria-selected off every option, then set it to "true" on this one
-  //     (the check mark in the CSS keys off aria-selected)
-  //   - closeDropdown()
-  //   - selectedOutput.textContent = option.textContent
+  selectedValue = option.dataset.value;
+  label.textContent = option.textContent;
+  label.classList.remove("is-placeholder");
+  const allOptions = list.querySelectorAll(".dropdown__option");
+  for(let i = 0; i < allOptions.length; i++){
+    allOptions[i].removeAttribute("aria-selected")
+  }
+  option.setAttribute("aria-selected", "true");
+  closeDropdown();
+  selectedOutput.textContent = option.textContent
 }
 
 // --- Event listeners ---
+trigger.addEventListener("click", toggleDropdown)
 
-// TODO 1: click on `trigger` -> toggleDropdown()
+list.addEventListener("click",(event)=>{
+  const option = event.target.closest(".dropdown__option");
+  if (option === null) return;
+  selectOption(option);
+})
 
-// TODO 2: click on `list` -> selectOption(...)
-//   Put ONE listener on the list instead of one on every <li>.
-//   Inside it: const option = event.target.closest(".dropdown__option");
-//   If there's no option, return early. Otherwise call selectOption(option).
-
-// TODO 3: click on `document` -> close if the click was outside the dropdown
-//   Hint: if (!dropdown.contains(event.target)) closeDropdown();
+document.addEventListener("click", (event) => {
+  if (!dropdown.contains(event.target)) {
+    closeDropdown()
+  }
+});
 
 // TODO 4 (optional, once the rest works): keyboard support
 //   Escape closes it, ArrowDown/ArrowUp move a highlight using the
