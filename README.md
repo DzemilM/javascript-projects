@@ -8,7 +8,7 @@ browser and it runs.
 
 | Project | What it is | Project page |
 | --- | --- | --- |
-| [Custom Dropdown](./Custom%20Dropdown) | A dropdown menu with open, closed and selected states | - |
+| [Custom Dropdown](./Custom%20Dropdown) | A dropdown menu with open, closed and selected states | https://roadmap.sh/projects/custom-dropdown |
 | [Temperature Converter](./Temperature%20Converter) | Converts between Celsius, Fahrenheit and Kelvin | https://roadmap.sh/projects/temperature-converter |
 
 Each project has its own README with details.

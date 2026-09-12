@@ -47,3 +47,7 @@ So the JS just has to add and remove those at the right times.
 ## Running it
 
 Open `index.html` in a browser. That's it.
+
+## Project page
+
+[Project page](https://roadmap.sh/projects/custom-dropdown)
