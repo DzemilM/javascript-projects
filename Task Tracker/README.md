@@ -40,4 +40,4 @@ Open `index.html` in a browser.
 
 ## Project page
 
-[Project page](https://roadmap.sh/projects/task-tracker)
+[Project page](https://roadmap.sh/projects/task-tracker-js)
