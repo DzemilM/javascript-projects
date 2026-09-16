@@ -1,0 +1,177 @@
+:root {
+  --clr-bg: #f4f5f7;
+  --clr-surface: #ffffff;
+  --clr-border: #2b2f36;
+  --clr-text: #1b1b1b;
+  --clr-muted: #9ca3af;
+  --clr-placeholder: #c4c9d1;
+  --clr-divider: #e5e7eb;
+  --clr-done: #7a7a7a;
+  --clr-accent: #000000;
+
+  --radius: 12px;
+  --tracker-width: 640px;
+}
+
+body {
+  display: grid;
+  place-items: start center;
+  padding: 4rem 1.25rem;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.tracker {
+  width: 100%;
+  max-width: var(--tracker-width);
+  padding: 2.5rem;
+  background: var(--clr-surface);
+  border: 2px solid var(--clr-text);
+  border-radius: 24px;
+}
+
+.tracker__title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* ---------- Form ---------- */
+
+.task-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.375rem 0.375rem 1rem;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+}
+
+.task-form:focus-within {
+  outline: 3px solid rgba(27, 27, 27, 0.2);
+  outline-offset: 2px;
+}
+
+.task-form__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0;
+  font: inherit;
+  font-size: 1.125rem;
+  color: var(--clr-text);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.task-form__input::placeholder {
+  color: var(--clr-placeholder);
+}
+
+.task-form__submit {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #fff;
+  background: var(--clr-accent);
+  border-radius: 8px;
+}
+
+.task-form__submit:hover {
+  background: #333;
+}
+
+.task-form__submit:focus-visible {
+  outline: 3px solid rgba(27, 27, 27, 0.35);
+  outline-offset: 2px;
+}
+
+/* ---------- List ---------- */
+
+.task-list {
+  margin-top: 1.25rem;
+}
+
+/* Shown automatically while the list has no <li>s. */
+.task-list:empty::before {
+  content: "No tasks yet. Add one above.";
+  display: block;
+  padding: 1.5rem 0;
+  color: var(--clr-muted);
+  text-align: center;
+}
+
+/* ---------- Task ---------- */
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 0.25rem;
+  border-bottom: 2px solid var(--clr-divider);
+}
+
+.task__checkbox {
+  appearance: none;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  border: 2px solid var(--clr-text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.task__checkbox:focus-visible {
+  outline: 3px solid rgba(27, 27, 27, 0.3);
+  outline-offset: 2px;
+}
+
+.task__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.125rem;
+  overflow-wrap: anywhere;
+}
+
+/* Trash icon drawn with a mask, so it follows `color`. */
+.task__delete {
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--clr-text);
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 2h6v2h5v2H4V4h5V2zM5 8h14l-1 14H6L5 8zm4 3v8h2v-8H9zm4 0v8h2v-8h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 2h6v2h5v2H4V4h5V2zM5 8h14l-1 14H6L5 8zm4 3v8h2v-8H9zm4 0v8h2v-8h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity: 0.85;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.task__delete:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.task__delete:focus-visible {
+  outline: 3px solid rgba(27, 27, 27, 0.3);
+  outline-offset: 3px;
+}
+
+/* ---------- Completed state (JS adds `is-completed` to the <li>) ---------- */
+
+.task.is-completed .task__checkbox {
+  background: var(--clr-done);
+  border-color: #5f5f5f;
+}
+
+.task.is-completed .task__text {
+  color: var(--clr-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--clr-text);
+  text-decoration-thickness: 2px;
+}
