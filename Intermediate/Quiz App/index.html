@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!--
+    Three screens live in the page at once. Only one is visible at a time -
+    the other two carry the class `is-hidden`, which is just `display: none`.
+    Your showScreen() swaps that class around; nothing is ever created or
+    destroyed, so there is no layout jump between screens.
+  -->
+  <main class="quiz">
+
+    <!-- ============ 1. Start screen ============ -->
+    <section class="card screen" id="startScreen">
+      <h1 class="card__title">JavaScript Quiz</h1>
+
+      <p class="card__lead">
+        Eight multiple-choice questions on the JavaScript you have been writing.
+        You find out straight away whether you got each one right.
+      </p>
+
+      <ul class="rules">
+        <li class="rules__item"><strong>8</strong> questions, four answers each</li>
+        <li class="rules__item"><strong>60 seconds</strong> per question</li>
+        <li class="rules__item">Correct answer <strong>+1</strong></li>
+        <li class="rules__item">Running out of time <strong>&minus;1</strong></li>
+      </ul>
+
+      <button type="button" class="btn btn--primary" id="startButton">Start quiz</button>
+    </section>
+
+    <!-- ============ 2. Question screen ============ -->
+    <section class="card screen is-hidden" id="questionScreen">
+      <!--
+        The progress text and the clock. Your render fills both:
+        progress  -> "Question 3 of 8"
+        timer     -> "0:47"
+        Add `is-urgent` to the timer when the last 10 seconds are running,
+        the CSS turns it red and gives it a pulse.
+      -->
+      <header class="card__meta">
+        <span class="card__progress" id="progress">Question 1 of 8</span>
+        <span class="card__timer" id="timer" role="timer" aria-live="off">1:00</span>
+      </header>
+
+      <!-- Set the fill's inline `width` as a percentage to shrink the bar. -->
+      <div class="timer-bar" aria-hidden="true">
+        <div class="timer-bar__fill" id="timerBar" style="width: 100%"></div>
+      </div>
+
+      <h2 class="card__question" id="questionText"></h2>
+
+      <!--
+        Your renderQuestion() fills this list. Each answer looks like this:
+
+        <li>
+          <button type="button" class="answer" data-index="0">
+            <span class="answer__letter">A</span>
+            <span class="answer__text">pop()</span>
+          </button>
+        </li>
+
+        Once the question is answered, add one of these to the button:
+          is-correct   green  - always put this on the right answer
+          is-wrong     red    - only on the wrong one the user picked
+        and set `disabled` on every button so nothing can be clicked twice.
+      -->
+      <ul class="answers" id="answerList"></ul>
+
+      <footer class="card__footer">
+        <!-- "Correct!" / "Not quite." / "Time's up." - add `is-correct` or `is-wrong`. -->
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+
+        <!-- Hidden until the question is answered. Says "See results" on the last one. -->
+        <button type="button" class="btn btn--primary is-hidden" id="nextButton">Next question</button>
+      </footer>
+    </section>
+
+    <!-- ============ 3. Results screen ============ -->
+    <section class="card screen is-hidden" id="resultsScreen">
+      <h2 class="card__title">Your results</h2>
+
+      <!-- e.g. "6 / 8" -->
+      <p class="score" id="finalScore"></p>
+      <!-- e.g. "5 correct, 2 wrong, 1 timed out" -->
+      <p class="score__detail" id="scoreDetail"></p>
+
+      <!--
+        Your renderResults() fills this list, one <li> per question:
+
+        <li class="result is-correct">
+          <p class="result__question">Which method removes the last element?</p>
+          <p class="result__line">Your answer: <span>pop()</span></p>
+          <p class="result__line">Correct answer: <span>pop()</span></p>
+        </li>
+
+        The <li> class decides the colour of the stripe down its left edge:
+          is-correct   green
+          is-wrong     red
+          is-skipped   grey, for the ones that ran out of time
+      -->
+      <ol class="results" id="resultsList"></ol>
+
+      <button type="button" class="btn btn--primary" id="restartButton">Try again</button>
+    </section>
+
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
