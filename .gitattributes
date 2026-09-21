@@ -1,0 +1,4 @@
+# Normalise line endings.
+# Everything in here is text, so store it with LF in the repo and check it
+# out with LF too, whatever core.autocrlf is set to on the machine.
+* text=auto eol=lf
