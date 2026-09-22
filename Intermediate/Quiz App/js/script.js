@@ -105,7 +105,31 @@ function stopTimer() {
   - hide the next button again: nextButton.classList.add("is-hidden")
 */
 function renderQuestion() {
+  const question = QUESTIONS[state.currentIndex];
+  progress.textContent = `Question ${state.currentIndex + 1} of ${QUESTIONS.length}`;
+  questionText.textContent = question.question;
+  answerList.replaceChildren();
 
+  question.answers.forEach((answer, i) => {
+      const li = document.createElement("li");
+      const letter = document.createElement("span");
+      const text = document.createElement("span");
+      const button = document.createElement("button");
+      letter.className="answer__letter";
+      letter.textContent= LETTERS[i];
+      text.className="answer__text";
+      text.textContent=answer;
+      button.type="button";
+      button.className="answer";
+      button.dataset.index=i;
+      button.append(letter, text);
+      li.append(button);
+      answerList.append(li);
+  });
+      feedback.textContent="";
+      feedback.classList.remove("is-correct", "is-wrong");
+      nextButton.classList.add("is-hidden");
+      nextButton.textContent = state.currentIndex === QUESTIONS.length - 1 ? "See results" : "Next question";
 }
 
 /*
@@ -123,6 +147,17 @@ function renderQuestion() {
   You can read an index back off a button with Number(button.dataset.index).
 */
 function renderAnswered(selected) {
+  let buttons = answerList.querySelectorAll(".answer");
+  const correct = QUESTIONS[state.currentIndex].correct;
+  buttons.forEach((button) => {
+  button.disabled = true;
+  const buttonIndex = Number(button.dataset.index);
+  if(buttonIndex === correct){
+    button.classList.add("is-correct")
+  } else if(buttonIndex === selected){
+    button.classList.add("is-wrong")
+  }
+});
 
 }
 
@@ -147,8 +182,59 @@ function renderAnswered(selected) {
     Find the question an entry belongs to with
     QUESTIONS.find(q => q.id === entry.questionId).
 */
-function renderResults() {
+/*
+  How did one entry in state.results turn out?
+  Returns "skipped", "correct" or "wrong".
 
+  The entry on its own cannot answer this - it only knows which button was
+  clicked, not which one was right - so it looks the question up by its id.
+*/
+function outcomeOf(entry) {
+  if (entry.timedOut) return "skipped";
+  const question = QUESTIONS.find(q => q.id === entry.questionId);
+  return entry.selected === question.correct ? "correct" : "wrong";
+}
+
+function renderResults() {
+  finalScore.textContent = `${state.score} / ${QUESTIONS.length}`;
+  const correct = state.results.filter(r => outcomeOf(r) === "correct").length;
+  const wrong = state.results.filter(r => outcomeOf(r) === "wrong").length;
+  const skipped = state.results.filter(r => outcomeOf(r) === "skipped").length;
+  scoreDetail.textContent = `${correct} correct, ${wrong} wrong, ${skipped} timed out`;
+  resultsList.replaceChildren();
+
+  state.results.forEach((entry) => {
+    const question = QUESTIONS.find(q => q.id === entry.questionId);
+    const outcome = outcomeOf(entry);
+
+    const li = document.createElement("li");
+    // outcomeOf returns "correct" / "wrong" / "skipped", which is exactly
+    // the tail of the three class names the CSS is waiting for.
+    li.className = `result is-${outcome}`;
+
+    const questionLine = document.createElement("p");
+    questionLine.className = "result__question";
+    questionLine.textContent = question.question;
+
+    // A timed-out question has no selected index, so there is nothing to
+    // look up in question.answers - say so instead.
+    const yours = document.createElement("span");
+    yours.textContent = entry.timedOut ? "No answer" : question.answers[entry.selected];
+
+    const yourLine = document.createElement("p");
+    yourLine.className = "result__line";
+    yourLine.append("Your answer: ", yours);
+
+    const right = document.createElement("span");
+    right.textContent = question.answers[question.correct];
+
+    const rightLine = document.createElement("p");
+    rightLine.className = "result__line";
+    rightLine.append("Correct answer: ", right);
+
+    li.append(questionLine, yourLine, rightLine);
+    resultsList.append(li);
+  });
 }
 
 // ---------- The clock ----------
@@ -166,7 +252,14 @@ function renderResults() {
       when state.timeLeft reaches 0 -> handleTimeout()
 */
 function startTimer() {
-
+  stopTimer();
+  state.timeLeft = SECONDS_PER_QUESTION;
+  updateTimerDisplay();
+  state.intervalId = setInterval(() => {
+    state.timeLeft -=1;
+    updateTimerDisplay();
+    if(state.timeLeft <= 0){handleTimeout()}
+}, 1000);
 }
 
 /*
@@ -180,7 +273,10 @@ function startTimer() {
     this in one line.
 */
 function updateTimerDisplay() {
-
+  timer.textContent = formatTime(state.timeLeft);
+  timerBar.style.width = `${(state.timeLeft / SECONDS_PER_QUESTION) * 100}%`;
+  timer.classList.toggle("is-urgent", state.timeLeft <= 10);
+  timerBar.classList.toggle("is-urgent", state.timeLeft <= 10);
 }
 
 // ---------- What happens ----------
@@ -202,7 +298,22 @@ function updateTimerDisplay() {
       "Next question" - state.currentIndex === QUESTIONS.length - 1 tells you.
 */
 function handleAnswer(index) {
+  if(state.answered === true) return;
+  state.answered = true;
+  stopTimer();
+  if(index === QUESTIONS[state.currentIndex].correct){
+    state.score += 1;
+    feedback.textContent = "Correct!";
+    feedback.classList.add("is-correct");
+  } else {
+    feedback.textContent = "Not quite.";
+    feedback.classList.add("is-wrong");
+  }
 
+  state.results.push({ questionId: QUESTIONS[state.currentIndex].id,
+    selected: index, timedOut: false });
+  renderAnswered(index);
+  nextButton.classList.remove("is-hidden");
 }
 
 /*
@@ -220,7 +331,14 @@ function handleAnswer(index) {
   goToNext() from here instead of showing the button.
 */
 function handleTimeout() {
-
+  state.answered = true;
+  stopTimer();
+  state.score -= 1;
+  state.results.push({ questionId: QUESTIONS[state.currentIndex].id, selected: null, timedOut: true });
+  renderAnswered(null);
+  feedback.textContent = "Time is up.";
+  feedback.classList.add("is-wrong");
+  nextButton.classList.remove("is-hidden")
 }
 
 /*
@@ -232,7 +350,15 @@ function handleTimeout() {
     then renderQuestion() and startTimer()
 */
 function goToNext() {
-
+  if(state.currentIndex === QUESTIONS.length - 1){
+    showScreen(resultsScreen);
+    renderResults();
+    return
+  } 
+    state.currentIndex += 1;
+    state.answered = false;
+    renderQuestion();
+    startTimer();
 }
 
 /*
@@ -246,7 +372,19 @@ function goToNext() {
   - renderQuestion() and startTimer()
 */
 function startQuiz() {
-
+  stopTimer();
+  state = {
+     currentIndex : 0,
+     score : 0,
+     answered : false,
+     timeLeft : SECONDS_PER_QUESTION,
+     intervalId : null,
+     results : []
+  }
+  
+  showScreen(questionScreen);
+  renderQuestion();
+  startTimer();
 }
 
 // ---------- Event listeners ----------
