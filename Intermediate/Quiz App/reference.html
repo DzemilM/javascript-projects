@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz App — Scaffold Reference</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #17181c;
+    --muted: #64697a;
+    --border: #e3e6ec;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px -12px rgba(0,0,0,.12);
+
+    --done: #157f3d;
+    --done-bg: #e7f6ec;
+    --todo: #8a5a00;
+    --todo-bg: #fdf3e0;
+    --accent: #2a4cc7;
+
+    --c-tag: #1f6feb;
+    --c-attr: #8250df;
+    --c-str: #0a7c42;
+    --c-com: #7c8496;
+    --c-kw: #cf222e;
+    --c-fn: #953800;
+
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1116;
+      --surface: #171a21;
+      --text: #e6e8ee;
+      --muted: #9aa1b4;
+      --border: #272b36;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+
+      --done: #56d364;
+      --done-bg: #10301c;
+      --todo: #e3b341;
+      --todo-bg: #322412;
+      --accent: #7d9bff;
+
+      --c-tag: #79c0ff;
+      --c-attr: #d2a8ff;
+      --c-str: #7ee787;
+      --c-com: #8b949e;
+      --c-kw: #ff7b72;
+      --c-fn: #ffa657;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0f1116;
+    --surface: #171a21;
+    --text: #e6e8ee;
+    --muted: #9aa1b4;
+    --border: #272b36;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+
+    --done: #56d364;
+    --done-bg: #10301c;
+    --todo: #e3b341;
+    --todo-bg: #322412;
+    --accent: #7d9bff;
+
+    --c-tag: #79c0ff;
+    --c-attr: #d2a8ff;
+    --c-str: #7ee787;
+    --c-com: #8b949e;
+    --c-kw: #ff7b72;
+    --c-fn: #ffa657;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    padding: 3rem 1rem 6rem;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  header { margin-bottom: 2.5rem; }
+
+  h1 {
+    font-size: 1.9rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .sub { color: var(--muted); margin-top: .5rem; max-width: 62ch; }
+
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+
+  h2 {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: .95rem;
+    margin: 1.5rem 0 .6rem;
+    color: var(--accent);
+  }
+  h3:first-of-type { margin-top: 0; }
+
+  p + p { margin-top: .75rem; }
+  .note { color: var(--muted); font-size: .92rem; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  td, th {
+    text-align: left;
+    padding: .5rem .5rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    font-size: .93rem;
+  }
+  tr:last-child td { border-bottom: none; }
+  th { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+
+  code, .mono { font-family: var(--mono); font-size: .88em; }
+
+  td code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: .1rem .35rem;
+    white-space: nowrap;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: .12rem .5rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    font-family: var(--mono);
+  }
+  .badge.done { color: var(--done); background: var(--done-bg); }
+  .badge.todo { color: var(--todo); background: var(--todo-bg); }
+
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: .85rem;
+    line-height: 1.55;
+  }
+
+  .tag  { color: var(--c-tag); }
+  .attr { color: var(--c-attr); }
+  .str  { color: var(--c-str); }
+  .com  { color: var(--c-com); font-style: italic; }
+  .kw   { color: var(--c-kw); }
+  .fn   { color: var(--c-fn); }
+
+  ol.steps { list-style: none; counter-reset: s; }
+  ol.steps li {
+    counter-increment: s;
+    padding: .55rem 0 .55rem 2.4rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    font-size: .93rem;
+  }
+  ol.steps li:last-child { border-bottom: none; }
+  ol.steps li::before {
+    content: counter(s);
+    position: absolute;
+    left: 0; top: .55rem;
+    width: 1.6rem; height: 1.6rem;
+    display: grid; place-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    font-family: var(--mono);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  ol.steps li.is-done::before {
+    background: var(--done-bg);
+    border-color: var(--done);
+    color: var(--done);
+    content: "\2713";
+  }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .flow span {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: .3rem .6rem;
+  }
+  .flow i { color: var(--muted); font-style: normal; }
+
+  ul.plain { list-style: none; }
+  ul.plain li {
+    padding: .35rem 0 .35rem 1.1rem;
+    position: relative;
+    font-size: .93rem;
+  }
+  ul.plain li::before {
+    content: "";
+    position: absolute; left: 0; top: .95rem;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--muted);
+  }
+
+  footer {
+    color: var(--muted);
+    font-size: .85rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 560px) {
+    body { padding: 2rem .75rem 4rem; }
+    section { padding: 1.15rem; }
+    td, th { padding: .45rem .3rem; font-size: .87rem; }
+    td code { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Quiz App — scaffold reference</h1>
+    <p class="sub">
+      Everything the HTML and CSS hand you, on one page. The markup, styling and
+      questions are written; <code>js/script.js</code> is yours.
+    </p>
+  </header>
+
+  <section>
+    <h2>The shape of it</h2>
+    <p class="note" style="margin-bottom:1rem">
+      All three screens sit in the page at once. Two carry <code>is-hidden</code>.
+      Nothing is created or destroyed when you switch — you just move that class.
+    </p>
+    <div class="flow">
+      <span>state</span><i>→</i>
+      <span>render fn</span><i>→</i>
+      <span>DOM</span><i style="margin:0 .4rem">|</i>
+      <span>event</span><i>→</i>
+      <span>change state</span><i>→</i>
+      <span>render again</span>
+    </div>
+    <p class="note" style="margin-top:1rem">
+      State is the truth, the screen is only a picture of it. Same idea as
+      <code>useState</code>, except you call the render yourself.
+    </p>
+  </section>
+
+  <section>
+    <h2>Elements you were given</h2>
+
+    <h3>Screen containers</h3>
+    <p class="note" style="margin-bottom:.75rem">
+      Only ever passed to <code>showScreen()</code>.
+    </p>
+    <table>
+      <tr><td><code>startScreen</code></td><td>the intro card</td><td></td></tr>
+      <tr><td><code>questionScreen</code></td><td>the question card</td><td></td></tr>
+      <tr><td><code>resultsScreen</code></td><td>the results card</td><td></td></tr>
+    </table>
+
+    <h3>Question screen</h3>
+    <table>
+      <tr><th>variable</th><th>on screen</th><th>used by</th></tr>
+      <tr><td><code>progress</code></td><td>"Question 1 of 8"</td><td><span class="badge done">TODO 1</span></td></tr>
+      <tr><td><code>questionText</code></td><td>the question itself</td><td><span class="badge done">TODO 1</span></td></tr>
+      <tr><td><code>answerList</code></td><td>empty <code>&lt;ul&gt;</code> you fill</td><td><span class="badge done">TODO 1</span></td></tr>
+      <tr><td><code>feedback</code></td><td>"Correct!" / "Not quite."</td><td><span class="badge done">1</span> <span class="badge todo">3</span></td></tr>
+      <tr><td><code>nextButton</code></td><td>"Next question"</td><td><span class="badge done">1</span> <span class="badge todo">3</span></td></tr>
+      <tr><td><code>timer</code></td><td>"1:00"</td><td><span class="badge todo">TODO 7</span></td></tr>
+      <tr><td><code>timerBar</code></td><td>the bar beneath it</td><td><span class="badge todo">TODO 7</span></td></tr>
+    </table>
+
+    <h3>Results screen</h3>
+    <table>
+      <tr><th>variable</th><th>on screen</th><th>used by</th></tr>
+      <tr><td><code>finalScore</code></td><td>the big "6 / 8"</td><td><span class="badge todo">TODO 8</span></td></tr>
+      <tr><td><code>scoreDetail</code></td><td>"5 correct, 2 wrong…"</td><td><span class="badge todo">TODO 8</span></td></tr>
+      <tr><td><code>resultsList</code></td><td>empty <code>&lt;ol&gt;</code> you fill</td><td><span class="badge todo">TODO 8</span></td></tr>
+    </table>
+
+    <h3>Buttons already wired</h3>
+    <p class="note">
+      <code>startButton</code>, <code>restartButton</code> and <code>nextButton</code>
+      have their listeners at the bottom of <code>script.js</code>. You never touch
+      them again — you just write the functions they call.
+    </p>
+  </section>
+
+  <section>
+    <h2>Only two are containers</h2>
+    <p class="note">
+      <code>answerList</code> and <code>resultsList</code> are the only elements you
+      build into. Every other one, you set <code>textContent</code> or toggle a class.
+      That is the whole surface.
+    </p>
+  </section>
+
+  <section>
+    <h2>Classes your JS toggles</h2>
+    <p class="note" style="margin-bottom:1rem">
+      The CSS is written for all of these. Adding the class is the whole job — no
+      inline styles anywhere except the timer bar's width.
+    </p>
+    <table>
+      <tr><th>class</th><th>goes on</th><th>does what</th></tr>
+      <tr><td><code>is-hidden</code></td><td>a screen, <code>nextButton</code></td><td><code>display: none</code></td></tr>
+      <tr><td><code>is-correct</code></td><td>answer button, feedback, result <code>li</code></td><td>green + tick</td></tr>
+      <tr><td><code>is-wrong</code></td><td>answer button, feedback, result <code>li</code></td><td>red + cross</td></tr>
+      <tr><td><code>is-skipped</code></td><td>result <code>li</code></td><td>grey stripe</td></tr>
+      <tr><td><code>is-urgent</code></td><td><code>timer</code>, <code>timerBar</code></td><td>red + pulse</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>The DOM you build</h2>
+
+    <h3>One answer — <span class="badge done">TODO 1, done</span></h3>
+<pre><span class="tag">&lt;li&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"button"</span> <span class="attr">class</span>=<span class="str">"answer"</span> <span class="attr">data-index</span>=<span class="str">"0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"answer__letter"</span><span class="tag">&gt;</span>A<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"answer__text"</span><span class="tag">&gt;</span>pop()<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/li&gt;</span></pre>
+
+    <h3>One result row — <span class="badge todo">TODO 8</span></h3>
+<pre><span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="str">"result is-correct"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"result__question"</span><span class="tag">&gt;</span>Which method…<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"result__line"</span><span class="tag">&gt;</span>Your answer: <span class="tag">&lt;span&gt;</span>pop()<span class="tag">&lt;/span&gt;&lt;/p&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"result__line"</span><span class="tag">&gt;</span>Correct answer: <span class="tag">&lt;span&gt;</span>pop()<span class="tag">&lt;/span&gt;&lt;/p&gt;</span>
+<span class="tag">&lt;/li&gt;</span></pre>
+
+    <p class="note" style="margin-top:1rem">
+      These are pictures of the target, not code to paste. You build them with
+      <code>document.createElement</code> — which is what JSX compiles into anyway.
+    </p>
+  </section>
+
+  <section>
+    <h2>State</h2>
+<pre><span class="kw">let</span> state = {
+  currentIndex: <span class="str">0</span>,      <span class="com">// which question, 0-based</span>
+  score: <span class="str">0</span>,             <span class="com">// +1 correct, -1 timed out</span>
+  answered: <span class="kw">false</span>,      <span class="com">// stops a second click scoring twice</span>
+  timeLeft: <span class="str">60</span>,         <span class="com">// seconds on the current question</span>
+  intervalId: <span class="kw">null</span>,     <span class="com">// so the clock can be stopped</span>
+  results: [],          <span class="com">// { questionId, selected, timedOut }</span>
+};</pre>
+    <p class="note" style="margin-top:1rem">
+      Doing maths? You want <code>state.currentIndex</code>. Reading text? You want
+      <code>QUESTIONS[state.currentIndex]</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Helpers already written</h2>
+    <table>
+      <tr><td><code class="mono">showScreen(el)</code></td><td>shows one screen, hides the other two</td></tr>
+      <tr><td><code class="mono">formatTime(s)</code></td><td><code>47</code> → <code>"0:47"</code></td></tr>
+      <tr><td><code class="mono">stopTimer()</code></td><td>kills the interval, safe to call any time</td></tr>
+    </table>
+    <p class="note" style="margin-top:1rem">
+      Plus <code>QUESTIONS</code> and <code>SECONDS_PER_QUESTION</code> from
+      <code>js/data.js</code>, and <code>LETTERS</code> for the A/B/C/D.
+    </p>
+  </section>
+
+  <section>
+    <h2>Order to write them</h2>
+    <ol class="steps">
+      <li class="is-done"><strong>renderQuestion</strong> — question on screen</li>
+      <li><strong>startQuiz</strong> — reset state, show the question screen <span class="note">← playable after this</span></li>
+      <li><strong>handleAnswer</strong> — score it, show feedback</li>
+      <li><strong>goToNext</strong> — advance, or show results</li>
+      <li><strong>renderAnswered</strong> — paint the buttons red/green</li>
+      <li><strong>startTimer</strong> — the countdown</li>
+      <li><strong>updateTimerDisplay</strong> — draw the clock and bar</li>
+      <li><strong>renderResults</strong> — the final screen</li>
+      <li><strong>handleTimeout</strong> — the −1 penalty</li>
+    </ol>
+    <p class="note" style="margin-top:1rem">
+      Numbered by the order to tackle them, not the order they appear in the file.
+    </p>
+  </section>
+
+  <section>
+    <h2>Testing a function before the app can reach it</h2>
+    <p class="note" style="margin-bottom:.75rem">
+      Everything is a global in a classic script, so the console can call it:
+    </p>
+<pre><span class="fn">showScreen</span>(questionScreen); <span class="fn">renderQuestion</span>();</pre>
+    <ul class="plain" style="margin-top:1rem">
+      <li>Buttons unstyled → a class name is misspelled</li>
+      <li>Letters missing → spans appended to the wrong parent</li>
+      <li>Same answer four times → a hardcoded value where <code>answer</code> or <code>i</code> belongs</li>
+    </ul>
+  </section>
+
+  <footer>Quiz App · reference for the scaffold in this folder</footer>
+
+</div>
+</body>
+</html>
